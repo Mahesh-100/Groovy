@@ -1,18 +1,22 @@
 package com.conditions
 
+import groovy.transform.Immutable
+import groovy.transform.ToString
+
 import java.util.stream.Collector
 import java.util.stream.Collectors
-
+@Immutable
+//@ToString
 class Product {
      String name
      String company
      double price
 
-    Product(String name, String company, double price) {
-        this.name = name
-        this.company = company
-        this.price = price
-    }
+//    Product(String name, String company, double price) {
+//        this.name = name
+//        this.company = company
+//        this.price = price
+//    }
     String toString() {
         return "Product(name: ${name}, company: ${company}, price: ${price})"
     }
@@ -26,8 +30,11 @@ class Product {
         ]
 
 
-       def  dellLaptops=products.stream().filter {it.company.equalsIgnoreCase("DELL")}.filter {it.price>50000}.collect(Collectors.toList())
+       //def  dellLaptops=products.stream().filter {it.company.equalsIgnoreCase("DELL")}.filter {it.price>50000}.collect(Collectors.toList())
         //dellLaptops.each {product-> println(product)}
+        def  dellLaptops=products.findAll(){
+            it.company.equalsIgnoreCase("DELL") && it.price>50000
+        }
         println dellLaptops
 
 
