@@ -1,5 +1,5 @@
 package com.conditions
-
+//import groovyx.gpars.GParsPool
 class Demo {
     String name
     int age
@@ -17,12 +17,32 @@ class Demo {
         def map = [name: 'John', age: 30]
 
 // Add or update a key-value pair
-        map['location'] = 'IND'
-        map['name']='mahesh'
+//        map['location'] = 'IND'
+//        map['name']='mahesh'
+//
+//        println map
+//        def result = operate(5, 3, sum)
+//        println result
 
-        println map
-        def result = operate(5, 3, sum)
-        println result
+//        Thread.start {
+//            println "Running in a new thread"
+//            Thread.sleep(1000)
+//            println "Thread finished"
+//        }
+
+        def thread1 = new MyThread()
+        def thread2 = new MyThread()
+
+        thread1.start()
+        thread2.start()
+
+        thread1.join() // Wait for thread1 to finish
+        thread2.join() // Wait for thread2 to finish
+
+//        GParsPool.withPool {
+//            (1..5).eachParallel { println "Parallel processing: $it" }
+//        }
+
 
     }
 
