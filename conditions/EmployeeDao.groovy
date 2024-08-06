@@ -18,55 +18,80 @@ class EmployeeDao {
         ]
 
         // Filter out employees who are not in a specified department.
-         String targetDepartment="HR"
-        def listOfNotTargetDept = { Employee e -> (e.department != targetDepartment) }
-        employees.findAll(listOfNotTargetDept).each { println it }
+        def thread1 = new Thread({
+            println Thread.currentThread().name
 
-        // Group employees by their department.
-        def groupingByDept = employees.groupBy { it.department }
-        groupingByDept.each { dept, empList -> println "$dept : $empList " }
+            String targetDepartment = "HR"
+            def listOfNotTargetDept = { Employee e -> (e.department != targetDepartment) }
+            employees.findAll(listOfNotTargetDept).each { println it }
 
-        // Calculate the average salary for each department.
-        def avgSalByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
-            {
-                [dept, empList.collect { it.salary }.sum() / empList.size()]
+            // Group employees by their department.
+
+            def groupingByDept = employees.groupBy { it.department }
+            println "\nEmployees by each department"
+            groupingByDept.each { dept, empList -> println "$dept : $empList " }
+
+            // Calculate the average salary for each department.
+
+            def avgSalByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
+                {
+                    [dept, empList.collect { it.salary }.sum() / empList.size()]
+                }
             }
-        }
-        avgSalByDept.each { deptName, sal -> println "$deptName : $sal " }
+            println "\naverage salary by each department"
+            avgSalByDept.each { deptName, sal -> println "$deptName : $sal " }
 
-        // Find the highest-paid employee in each department.
-        def highPaidEmpByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
-            {
-                [dept, empList.max { it.salary }]
+            // Find the highest-paid employee in each department.
+
+            def highPaidEmpByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
+                {
+                    [dept, empList.max { it.salary }]
+                }
             }
-        }
 
-        println "\nDepartments with highest salary Employee"
-        highPaidEmpByDept.each { deptName, sal -> println "$deptName : $sal " }
+            println "\nDepartments with highest salary Employee"
+            highPaidEmpByDept.each { deptName, sal -> println "$deptName : $sal " }
+        })
+        def thread2 = new Thread({
+            println Thread.currentThread().name
+            // Show the salary list of all the employees in descending order
 
-        // Show the salary list of all the employees in descending order
-        println "\nSalaries in descending order:"
-        def salByDescendingOrder = employees.sort { -it.salary }
-        salByDescendingOrder.each { println "${it.name},${it.age},${it.salary},${it.department}" }
 
-        println "\nemployees between salary range:"
-        def salByRange = employees.findAll { it.salary > 50000 && it.salary < 100000 }
-        salByRange.each { println "${it.name},${it.age},${it.salary},${it.department}" }
+            def salByDescendingOrder = employees.sort { -it.salary }
+            println "\nSalaries in descending order:"
+            salByDescendingOrder.each { println "${it.name},${it.age},${it.salary},${it.department}" }
 
-        // Calculate the salary expenses for each department
-        println "\nsalary expenses by each department:"
-        def SalExpByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
-            {
-                [dept, empList.collect { it.salary }.sum() ]
+
+
+            def salByRange = employees.findAll { it.salary > 50000 && it.salary < 100000 }
+            println "\nemployees between salary range:"
+            salByRange.each { println "${it.name},${it.age},${it.salary},${it.department}" }
+
+            // Calculate the salary expenses for each department
+
+
+            def SalExpByDept = employees.groupBy { it.department }.collectEntries { dept, empList ->
+                {
+                    [dept, empList.collect { it.salary }.sum()]
+                }
             }
-        }
-        SalExpByDept.each { deptName, sal -> println "$deptName : $sal " }
-        // Find employees with Longest and shortest names
-        println "\nshort and long names:"
-        def employeeWithLongestName =  employees.max {it.name.size()}
-        def employeeWithShortestName  =employees.min {it.name.size()}
-        def shortAndLongNames=[employeeWithShortestName,employeeWithLongestName]
-        shortAndLongNames.each {println "${it.name},${it.age},${it.salary},${it.department}"}
+            println "\nsalary expenses by each department:"
+            SalExpByDept.each { deptName, sal -> println "$deptName : $sal " }
+            // Find employees with Longest and shortest names
+
+
+            def employeeWithLongestName = employees.max { it.name.size() }
+            def employeeWithShortestName = employees.min { it.name.size() }
+            def shortAndLongNames = [employeeWithShortestName, employeeWithLongestName]
+            println "\nshort and long names:"
+            shortAndLongNames.each { println "${it.name},${it.age},${it.salary},${it.department}" }
+
+        })
+        thread1.start()
+        thread1.join()
+        thread1.sleep(5000)
+        thread2.start()
+        thread2.join()
     }
 
 }
