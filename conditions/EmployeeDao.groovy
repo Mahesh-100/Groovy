@@ -1,5 +1,7 @@
 package com.conditions
 
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 
 
@@ -16,9 +18,9 @@ class EmployeeDao {
                 new Employee("raghu", 27, 760000, "Development"),
                 new Employee("ganesh", 42, 68000, "finance")
         ]
-
+        def executor = Executors.newFixedThreadPool(2)
         // Filter out employees who are not in a specified department.
-        def thread1 = new Thread({
+        def thread1 = {
             println Thread.currentThread().name
 
             String targetDepartment = "HR"
@@ -51,8 +53,8 @@ class EmployeeDao {
 
             println "\nDepartments with highest salary Employee"
             highPaidEmpByDept.each { deptName, sal -> println "$deptName : $sal " }
-        })
-        def thread2 = new Thread({
+        }
+        def thread2 = {
             println Thread.currentThread().name
             // Show the salary list of all the employees in descending order
 
@@ -86,12 +88,16 @@ class EmployeeDao {
             println "\nshort and long names:"
             shortAndLongNames.each { println "${it.name},${it.age},${it.salary},${it.department}" }
 
-        })
-        thread1.start()
-        thread1.join()
-        thread1.sleep(5000)
-        thread2.start()
-        thread2.join()
+        }
+        Future<?> future1=executor.submit(thread1)
+
+
+
+        Future<?> future2=executor.submit(thread2)
+        future1.get()
+        future2.get()
+        executor.shutdown()
+
     }
 
 }
