@@ -9,7 +9,7 @@ class Employee {
     double salary
     String department
 
-    Employee(String name, int age, double salary, String department) {
+    Employee(String name, int age, double salary, String department = "Not Assigned") {
         this.name = name
         this.age = age
         this.salary = salary
