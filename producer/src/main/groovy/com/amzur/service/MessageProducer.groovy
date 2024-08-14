@@ -1,5 +1,6 @@
 package com.amzur.service
 
+import com.amzur.entity.User
 import io.micronaut.configuration.kafka.annotation.KafkaClient
 import io.micronaut.configuration.kafka.annotation.Topic
 
@@ -7,5 +8,5 @@ import io.micronaut.configuration.kafka.annotation.Topic
 interface MessageProducer {
 
     @Topic("demo-topic")
-    void sendMessage(String message)
+    def sendMessage(def user)
 }
