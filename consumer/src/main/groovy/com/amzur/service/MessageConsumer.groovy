@@ -1,5 +1,7 @@
 package com.amzur.service
 
+
+import com.amzur.entity.User
 import io.micronaut.configuration.kafka.annotation.KafkaListener
 import io.micronaut.configuration.kafka.annotation.Topic
 import org.slf4j.Logger
@@ -11,7 +13,9 @@ class MessageConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(MessageConsumer.class)
 
     @Topic("demo-topic")
-    void receiveMessage(String message) {
-        LOG.info("Received Message: ${message}")
+    void receiveMessage(def user) {
+        LOG.info("Received Message: ${user}")
+        
     }
 }
+
