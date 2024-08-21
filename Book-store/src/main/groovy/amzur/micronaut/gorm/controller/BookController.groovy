@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.annotation.Status
 import io.micronaut.http.HttpStatus
 
@@ -43,5 +44,17 @@ class BookController {
     @Get
     def getAllBooks(){
         return bookService.getAllBooks()
+    }
+    @Get("/author")
+    def getAllBooksByAuthor(@QueryValue String firstName,String lastName){
+        return bookService.getAllBooksByAuthor(firstName,lastName)
+    }
+    @Get("/pattern/{lastNamePattern}")
+    def getBooksByAuthorLastNamePattern(@PathVariable String lastNamePattern){
+        return bookService.getBooksByAuthorLastNamePattern(lastNamePattern)
+    }
+    @Get("/publishDate")
+    def getBooksPublishedBefore(@QueryValue Date date){
+        return bookService.getBooksPublishedBefore(date)
     }
 }

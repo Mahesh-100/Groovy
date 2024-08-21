@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class BookService {
 
     @Transactional
-    def saveBook(BookModel bookModel){
+    def saveBook(BookModel bookModel) {
         // Method to save a book with author
         if (bookModel == null || bookModel.author == null) {
             return "Invalid book or author data provided"
@@ -55,13 +55,14 @@ class BookService {
             return newAuthor
         }
     }
+
     @Transactional
-    def deleteBook(Long id){
-        Book book=Book.findById(id)
-        if(book){
+    def deleteBook(Long id) {
+        Book book = Book.findById(id)
+        if (book) {
             book.delete()
             return "removed successfully"
-        }else{
+        } else {
             return "Book Not Found"
         }
 
@@ -116,7 +117,6 @@ class BookService {
     }
 
 
-
     @Transactional
     def getBookById(Long id) {
         Book book = Book.get(id)
@@ -151,15 +151,83 @@ class BookService {
                     author: new AuthorModel(
                             firstName: book.author.firstName,
                             lastName: book.author.lastName,
-                            birthDate:  book.author.birthDate
+                            birthDate: book.author.birthDate
                     )
             )
         }
         return books
     }
+        @Transactional
+    def getAllBooksByAuthor(String firstName, String lastName) {
+        // Find the author based on the provided first name and last name
+        Author author = Author.findByFirstNameAndLastName(firstName, lastName)
+
+        if (author) {
+            // Fetch all books by the found author
+            List<Book> books = Book.findAllByAuthor(author)
+            // Convert each Book to a BookModel
+            List<BookModel> bookModels = books.collect { book ->
+                convertToBookModel(book)
+            }
+            return bookModels
+
+        }else {
+            return "Author Not Found"
+        }
+    }
+    @Transactional
+    def getBooksByAuthorLastNamePattern(String lastNamePattern) {
+        // Find authors whose last name matches the given pattern
+        List<Author> authors = Author.findAllByLastNameLike("%${lastNamePattern}%")
+
+        if (authors) {
+            // Fetch all books by the authors found
+            List<Book> books = Book.findAllByAuthorInList(authors)
+
+            // Convert each Book to a BookModel
+            List<BookModel> bookModels = books.collect { book ->
+                convertToBookModel(book)
+            }
+
+            return bookModels
+        } else {
+            return "No authors found with the given last name pattern"
+        }
+    }
 
 
+    @Transactional
+    def getBooksPublishedBefore(Date date) {
+        // Use dynamic finder to get books published before the specified date
+        List<Book> books = Book.findAllByPublishedDateLessThan(date)
+
+        // Convert the results to BookModel instances
+        List<BookModel> bookModels = books.collect { book ->
+            convertToBookModel(book)
+        }
+
+        return bookModels
+    }
 
 
+    BookModel convertToBookModel(Book book) {
+        if (book == null) {
+            return null
+        }
+
+        BookModel bookModel = new BookModel()
+        bookModel.title = book.title
+        bookModel.pages = book.pages
+        bookModel.publishedDate = book.publishedDate
+
+        // Convert the author associated with the book
+        AuthorModel authorModel = new AuthorModel()
+        authorModel.firstName = book.author.firstName
+        authorModel.lastName = book.author.lastName
+        authorModel.birthDate = book.author.birthDate
+        bookModel.author = authorModel
+
+        return bookModel
+    }
 
 }
