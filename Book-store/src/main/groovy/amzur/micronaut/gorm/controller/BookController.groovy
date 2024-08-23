@@ -57,4 +57,9 @@ class BookController {
     def getBooksPublishedBefore(@QueryValue Date date){
         return bookService.getBooksPublishedBefore(date)
     }
+
+    @Get("/bigBooks/{pages}")
+    def getMorePagesBooks(@PathVariable int pages){
+        return bookService.getMorePagesBooks(pages)
+    }
 }

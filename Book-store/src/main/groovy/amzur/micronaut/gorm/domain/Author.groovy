@@ -15,6 +15,7 @@ class Author {
 
     Date birthDate
 
+
     static hasMany = [books:Book]
 
     static constraints = {

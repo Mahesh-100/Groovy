@@ -5,13 +5,21 @@ import amzur.micronaut.gorm.domain.Book
 import amzur.micronaut.gorm.model.AuthorModel
 import amzur.micronaut.gorm.model.BookModel
 import grails.gorm.transactions.Transactional
+import org.hibernate.SessionFactory
 import org.springframework.dao.DataIntegrityViolationException
 
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class BookService {
+
+
+    @Inject
+    SessionFactory sessionFactory
+
+    def big_books="SELECT * FROM BOOK WHERE PAGES>=:PAGES"
 
     @Transactional
     def saveBook(BookModel bookModel) {
@@ -208,6 +216,12 @@ class BookService {
 
         return bookModels
     }
+@Transactional
+def getMorePagesBooks(int pages){
+    def session=sessionFactory.getCurrentSession()
+def morePagedBooks=session.createSQLQuery(big_books).setParameter("PAGES", pages).list()
+    return morePagedBooks
+}
 
 
     BookModel convertToBookModel(Book book) {
