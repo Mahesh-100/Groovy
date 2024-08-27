@@ -51,4 +51,10 @@ class UserController {
     def getEmail(@PathVariable Long userId){
         return userService.getEmail(userId)
     }
+
+    @Post("/login")
+    def login(@Body UserModel userModel)
+    {
+        return  userService.login(userModel.email,userModel.password)
+    }
 }

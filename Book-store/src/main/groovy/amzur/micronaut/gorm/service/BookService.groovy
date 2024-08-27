@@ -2,6 +2,7 @@ package amzur.micronaut.gorm.service
 
 import amzur.micronaut.gorm.domain.Author
 import amzur.micronaut.gorm.domain.Book
+import amzur.micronaut.gorm.handlers.UserNotFound
 import amzur.micronaut.gorm.model.AuthorModel
 import amzur.micronaut.gorm.model.BookModel
 import grails.gorm.transactions.Transactional
@@ -145,7 +146,7 @@ class BookService {
 
             return bookModel
         } else {
-            return "Book Not Found"
+           throw new UserNotFound("Book Not Found")
         }
     }
 
@@ -170,6 +171,7 @@ class BookService {
         // Find the author based on the provided first name and last name
         Author author = Author.findByFirstNameAndLastName(firstName, lastName)
 
+
         if (author) {
             // Fetch all books by the found author
             List<Book> books = Book.findAllByAuthor(author)
@@ -187,6 +189,7 @@ class BookService {
     def getBooksByAuthorLastNamePattern(String lastNamePattern) {
         // Find authors whose last name matches the given pattern
         List<Author> authors = Author.findAllByLastNameLike("%${lastNamePattern}%")
+
 
         if (authors) {
             // Fetch all books by the authors found

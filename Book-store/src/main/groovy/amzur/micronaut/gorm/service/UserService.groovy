@@ -2,6 +2,7 @@ package amzur.micronaut.gorm.service
 
 
 import amzur.micronaut.gorm.domain.Users
+import amzur.micronaut.gorm.handlers.UserNotFound
 import amzur.micronaut.gorm.model.UserModel
 import grails.gorm.transactions.Transactional
 
@@ -24,7 +25,7 @@ class UserService {
             users.delete()
             return "removed successfully"
         } else {
-            return "User Not Found"
+           throw new UserNotFound("User not Found")
         }
     }
 
@@ -36,7 +37,7 @@ class UserService {
 
             return users.save()
         } else {
-            return "User Not Found"
+            throw new UserNotFound("User Not Found")
         }
     }
 
@@ -52,7 +53,21 @@ class UserService {
 
             return users.email
         } else {
-            return "User Not Found"
+           throw new UserNotFound("User Not Found")
+        }
+    }
+
+    @Transactional
+    def login(String email,String password)
+    {
+        Users user=Users.findByEmailAndPassword(email,password)
+        if(user)
+        {
+            return  user
+        }
+        else
+        {
+            throw new UserNotFound("Invalid credentials")
         }
     }
 
