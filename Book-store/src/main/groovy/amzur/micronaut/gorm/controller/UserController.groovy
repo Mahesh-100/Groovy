@@ -29,8 +29,6 @@ class UserController {
     @Post
     @Status(HttpStatus.CREATED)
     def addUser( @Body UserModel userRequest){
-
-
         return userService.addUser(userRequest)
     }
     @Delete("/{userId}")
