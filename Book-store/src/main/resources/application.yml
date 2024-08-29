@@ -1,6 +1,8 @@
 micronaut:
     application:
         name: micronaut-gorm
+    server:
+      port: 8082
 dataSource:
     dbCreate: update
     pooled: true

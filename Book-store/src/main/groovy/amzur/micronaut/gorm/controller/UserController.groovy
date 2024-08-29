@@ -12,10 +12,12 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
 import io.micronaut.http.annotation.Status
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.HttpResponse
+
 
 import javax.inject.Inject
 
-@Controller('/users')
+@Controller('/user-process')
 class UserController {
 
     @Inject
@@ -28,8 +30,17 @@ class UserController {
 
     @Post
     @Status(HttpStatus.CREATED)
-    def addUser( @Body UserModel userRequest){
-        return userService.addUser(userRequest)
+    def addUser(@Body UserModel userRequest) {
+        try {
+            def user = userService.addUser(userRequest)
+            if (user) {
+                return HttpResponse.created(user)
+            } else {
+                return HttpResponse.badRequest("Failed to add user")
+            }
+        } catch (Exception e) {
+            return HttpResponse.serverError("An error occurred: ${e.message}")
+        }
     }
     @Delete("/{userId}")
     def removeUser(@PathVariable  int userId){
