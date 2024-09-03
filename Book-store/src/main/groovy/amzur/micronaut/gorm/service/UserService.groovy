@@ -33,7 +33,12 @@ class UserService {
     def updateUser(Long id, UserModel updatedUser){
         Users users = Users.findById(id)
         if (users) {
-            users=UserModel.toUser(updatedUser)
+            users.name = updatedUser.name
+            users.email = updatedUser.email
+            users.address = updatedUser.address
+            users.password=updatedUser.password
+            users.phoneNumber=updatedUser.phoneNumber
+
 
             return users.save()
         } else {
