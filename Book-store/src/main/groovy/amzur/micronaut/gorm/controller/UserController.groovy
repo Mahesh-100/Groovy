@@ -62,8 +62,17 @@ class UserController {
     }
 
     @Post("/login")
-    def login(@Body UserModel userModel)
-    {
-        return  userService.login(userModel.email,userModel.password)
+    @Status(HttpStatus.OK)
+    def login(@Body UserModel userModel) {
+        try {
+            def user = userService.login(userModel.email, userModel.password)
+            if (user) {
+                return HttpResponse.ok(user)
+            } else {
+                return HttpResponse.badRequest("Failed to add user")
+            }
+        } catch (Exception e) {
+            return HttpResponse.serverError("An error occurred: ${e.message}")
+        }
     }
 }

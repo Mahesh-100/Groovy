@@ -6,7 +6,7 @@ import amzur.micronaut.gorm.domain.OrderDomain
 import amzur.micronaut.gorm.domain.Users
 import amzur.micronaut.gorm.handlers.UserNotFound
 import amzur.micronaut.gorm.model.OrderModel
-import amzur.micronaut.gorm.model.UserModel
+
 import grails.gorm.transactions.Transactional
 
 import javax.inject.Singleton

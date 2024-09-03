@@ -2,7 +2,7 @@ micronaut:
     application:
         name: micronaut-gorm
     server:
-        port: 8082
+        port: 8083
         cors:
             enabled: true
             mappings:
