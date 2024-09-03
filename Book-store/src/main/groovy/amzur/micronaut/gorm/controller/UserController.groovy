@@ -46,9 +46,19 @@ class UserController {
             return HttpResponse.serverError("An error occurred: ${e.message}")
         }
     }
-    @Delete("/{userId}")
+    @Delete("/delete/{userId}")
+    @Status(HttpStatus.NO_CONTENT)
     def removeUser(@PathVariable  int userId){
-        return  userService.removeUser(userId)
+        try {
+            def isDeleted = userService.removeUser(userId)
+            if (isDeleted) {
+                return HttpResponse.noContent()
+            } else {
+                return HttpResponse.badRequest("Failed to remove user")
+            }
+        } catch (Exception e) {
+            return HttpResponse.serverError("An error occurred: ${e.message}")
+        }
     }
     @Get
     def getAllUsers(){

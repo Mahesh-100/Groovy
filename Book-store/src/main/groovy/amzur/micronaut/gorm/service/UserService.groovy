@@ -22,8 +22,8 @@ class UserService {
     def removeUser(Long id){
         Users users = Users.findById(id)
         if (users) {
-            users.delete()
-            return "removed successfully"
+             users.delete()
+            return true
         } else {
            throw new UserNotFound("User not Found")
         }
