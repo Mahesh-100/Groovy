@@ -37,7 +37,7 @@ class BookService {
         book.title = bookModel.title
         book.pages = bookModel.pages
         book.publishedDate = bookModel.publishedDate
-        book.author =
+        book.author =author
 
         // Save the book
         book.save(flush: true) // Use flush to immediately persist the changes
